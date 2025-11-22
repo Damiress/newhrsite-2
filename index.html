@@ -11,6 +11,273 @@
             box-sizing: border-box;
         }
 
+        /* 🎨 STUNNING WOW mobile timeline with premium effects */
+        @media (max-width: 768px) {
+            .timeline {
+                padding: 3rem 0.8rem;
+                position: relative;
+                perspective: 1000px;
+            }
+
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 32px;
+                top: 0;
+                bottom: 0;
+                width: 4px;
+                background: linear-gradient(180deg, 
+                    rgba(99, 102, 241, 0.1) 0%, 
+                    rgba(99, 102, 241, 0.9) 50%, 
+                    rgba(99, 102, 241, 0.1) 100%);
+                pointer-events: none;
+                box-shadow: 0 0 25px rgba(99, 102, 241, 0.8), inset 0 0 15px rgba(99, 102, 241, 0.5);
+                z-index: 5;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                transform: none !important;
+                margin-bottom: 2.5rem;
+                position: relative;
+                padding-left: 0;
+                padding-left: 0 !important;
+                justify-content: flex-start !important;
+                opacity: 0;
+                animation: floatInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            }
+
+            .timeline-item.visible {
+                transform: none !important;
+            }
+
+            @keyframes floatInUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(40px) scale(0.9);
+                }
+                60% {
+                    transform: translateY(-5px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            @keyframes pulse-glow {
+                0%, 100% {
+                    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4), 0 8px 25px rgba(99, 102, 241, 0.3);
+                }
+                50% {
+                    box-shadow: 0 0 30px rgba(99, 102, 241, 0.6), 0 12px 35px rgba(99, 102, 241, 0.4);
+                }
+            }
+
+            @keyframes energyFlow {
+                0% {
+                    transform: translateY(-100%) scaleY(0);
+                    opacity: 0;
+                }
+                20% {
+                    opacity: 1;
+                }
+                80% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(100%) scaleY(0);
+                    opacity: 0;
+                }
+            }
+
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: -20px;
+                width: 3px;
+                height: 60px;
+                background: linear-gradient(180deg, 
+                    transparent 0%,
+                    rgba(99, 102, 241, 0.8) 50%,
+                    transparent 100%);
+                animation: energyFlow 2s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+            .timeline-item:nth-child(1)::before { animation-delay: 0s; }
+
+            .timeline-item:nth-child(2) { animation-delay: 0.25s; }
+            .timeline-item:nth-child(2)::before { animation-delay: 0.3s; }
+
+            .timeline-item:nth-child(3) { animation-delay: 0.4s; }
+            .timeline-item:nth-child(3)::before { animation-delay: 0.6s; }
+
+            .timeline-item:nth-child(4) { animation-delay: 0.55s; }
+            .timeline-item:nth-child(4)::before { animation-delay: 0.9s; }
+
+            .timeline-item:nth-child(5) { animation-delay: 0.7s; }
+            .timeline-item:nth-child(5)::before { animation-delay: 1.2s; }
+
+            .timeline-number {
+                position: absolute;
+                left: 2px;
+                top: 0;
+                margin-bottom: 0;
+                margin-left: 0;
+                transform: translateX(-50%) !important;
+                width: 64px;
+                height: 64px;
+                font-size: 1.4rem;
+                font-weight: 800;
+                border: 4px solid #0a0a0a;
+                flex-shrink: 0;
+                z-index: 15;
+                background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                box-shadow: 0 0 20px rgba(99, 102, 241, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.1);
+                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: pulse-glow 3s ease-in-out infinite;
+            }
+
+            .timeline-number::before {
+                content: '';
+                position: absolute;
+                inset: -4px;
+                background: linear-gradient(45deg, #6366f1, #a855f7, #ec4899, #6366f1);
+                background-size: 300% 300%;
+                border-radius: 50%;
+                z-index: -1;
+                opacity: 0;
+                animation: shimmer 3s ease-in-out infinite;
+            }
+
+            @keyframes shimmer {
+                0%, 100% { opacity: 0; }
+                50% { opacity: 0.3; }
+            }
+
+            .timeline-item:active .timeline-number {
+                transform: translateX(-50%) scale(1.2) rotate(360deg) !important;
+                box-shadow: 0 0 40px rgba(99, 102, 241, 0.8), 0 15px 40px rgba(99, 102, 241, 0.5);
+                animation: none;
+            }
+
+            .timeline-content {
+                width: 100% !important;
+                margin-left: 0 !important;
+                padding: 1.4rem !important;
+                margin-left: 20px !important;
+                background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(168, 85, 247, 0.08) 100%);
+                border: 2px solid transparent;
+                border-radius: 20px;
+                position: relative;
+                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                overflow: hidden;
+                backdrop-filter: blur(5px);
+            }
+
+            .timeline-content::before {
+                display: none;
+            }
+
+            @keyframes shimmerFromLeft {
+                0% { opacity: 0; transform: translateX(-100%); }
+                20% { opacity: 1; }
+                50% { opacity: 1; transform: translateX(0); }
+                80% { opacity: 1; }
+                100% { opacity: 0; transform: translateX(100%); }
+            }
+
+            .timeline-content::after {
+                display: none;
+            }
+
+            .timeline-content:active {
+                background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.15) 100%);
+                border-color: rgba(99, 102, 241, 0.6);
+                box-shadow: 
+                    0 0 30px rgba(99, 102, 241, 0.3),
+                    inset 0 0 20px rgba(99, 102, 241, 0.1),
+                    0 15px 40px rgba(99, 102, 241, 0.2);
+                transform: translateY(-8px) scale(1.02);
+            }
+
+            .timeline-content h3 {
+                font-size: 1.2rem;
+                font-weight: 800;
+                margin-bottom: 0.7rem;
+                color: #fff;
+                letter-spacing: 0.5px;
+                background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: textGlide 0.6s ease-out;
+                padding-bottom: 0.8rem;
+                position: relative;
+            }
+
+            .timeline-content h3::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, 
+                    rgba(99, 102, 241, 0.6) 0%,
+                    rgba(99, 102, 241, 0.3) 50%,
+                    transparent 100%);
+                border-radius: 1px;
+                animation: underlineGlow 2.5s ease-in-out infinite;
+            }
+
+            @keyframes underlineGlow {
+                0% {
+                    opacity: 0.3;
+                    box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+                }
+                50% {
+                    opacity: 1;
+                    box-shadow: 0 0 15px rgba(99, 102, 241, 0.6), 0 0 25px rgba(168, 85, 247, 0.3);
+                }
+                100% {
+                    opacity: 0.3;
+                    box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+                }
+            }
+
+            @keyframes textGlide {
+                from {
+                    opacity: 0;
+                    transform: translateX(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .timeline-content p {
+                font-size: 0.96rem;
+                line-height: 1.7;
+                color: #b0b0b0;
+                word-break: break-word;
+                opacity: 0;
+                animation: fadeInDelay 0.8s ease-out 0.3s forwards;
+            }
+
+            @keyframes fadeInDelay {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #0a0a0a;
@@ -604,8 +871,9 @@
 
         @media (max-width: 768px) {
             .timeline-content {
-                width: calc(100% - 80px);
-                margin-left: 50px;
+                /* Reduce left offset so the card is wider on small screens */
+                margin-left: 70px;
+                width: calc(100% - 90px);
             }
         }
 
@@ -1933,6 +2201,41 @@
                 padding: 2rem;
             }
         }
+        /* Strong mobile override: place timeline numbers above cards to avoid overlap */
+        @media (max-width: 768px) {
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .timeline-number {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
+                width: 48px !important;
+                height: 48px !important;
+                font-size: 1rem !important;
+                margin: 0 0 0.5rem 0 !important;
+                border-width: 3px !important;
+                box-shadow: none !important;
+                z-index: 12 !important;
+            }
+
+            .timeline-content {
+                width: 100% !important;
+                margin-left: 0 !important;
+                padding: 0.9rem 1rem !important;
+                padding-left: 1rem !important;
+            }
+
+            .timeline::before { display: none !important; }
+
+            .timeline-content * {
+                overflow-wrap: break-word;
+                word-break: break-word;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2228,9 +2531,10 @@
 
     <footer>
         <p>&copy; 2024 NEXUS Marketing Agency. Всі права захищені.</p>
-        <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-            <a href="#" style="color: #71717a; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;">Політика конфіденційності</a>
-            <a href="#" style="color: #71717a; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;">Публічна оферта</a>   
+        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+            <a href="privacy.html" style="color: #71717a; text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">Політика конфіденційності</a>
+            <a href="offer.html" style="color: #71717a; text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">Публічна оферта</a>
+            <a href="siteforhr.html" style="color: #71717a; text-decoration: none; font-size: 0.95rem; transition: color 0.2s;">Головна</a>
         </div>
     </footer>
 
