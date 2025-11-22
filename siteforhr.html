@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Маркетинг нового покоління</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #6366f1;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-follower {
+            width: 8px;
+            height: 8px;
+            background: #6366f1;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.15s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .header.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 4rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 1000px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: #a1a1aa;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.6s;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.9s;
+        }
+
+        .btn-primary {
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 2px solid #6366f1;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .section {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #71717a;
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s 0.2s;
+        }
+
+        .section-subtitle.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .service-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: #a1a1aa;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.6s;
+        }
+
+        .stat-number.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .process-section {
+            background: #0a0a0a;
+        }
+
+        .timeline {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .timeline-item {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s;
+            text-align: center;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-10px);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .timeline-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            margin: 0 auto 2rem;
+        }
+
+        .timeline-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            color: #a1a1aa;
+            line-height: 1.8;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #1e1e1e 0%, #0a0a0a 100%);
+            padding: 8rem 4rem;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 30px;
+            padding: 4rem;
+        }
+
+        .form-container h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .form-container p {
+            text-align: center;
+            color: #a1a1aa;
+            margin-bottom: 3rem;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .cases-section {
+            background: #0a0a0a;
+        }
+
+        .cases-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .case-card {
+            background: rgba(99, 102, 241, 0.03);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .case-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .case-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .case-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .case-content {
+            padding: 2.5rem;
+        }
+
+        .case-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #a855f7;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .case-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .case-content p {
+            color: #a1a1aa;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .case-stats {
+            display: flex;
+            gap: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .case-stat {
+            flex: 1;
+        }
+
+        .case-stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .case-stat-label {
+            font-size: 0.9rem;
+            color: #71717a;
+            margin-top: 0.5rem;
+        }
+
+        .contact-grid {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card p {
+            color: #a1a1aa;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: #000;
+            padding: 3rem 4rem;
+            text-align: center;
+            color: #71717a;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem 2rem;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .section {
+                padding: 4rem 2rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .timeline::before {
+                display: none;
+            }
+            
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+            }
+            
+            .timeline-number {
+                left: 0;
+                transform: none;
+            }
+
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Stronger pop-in animation for cards */
+        @keyframes popIn {
+            0% { opacity: 0; transform: translateY(30px) scale(0.96); }
+            60% { opacity: 1; transform: translateY(-8px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .service-card, .case-card {
+            opacity: 0;
+            transform: translateY(30px) scale(0.96);
+            transition: transform 600ms cubic-bezier(.2,.9,.2,1), opacity 600ms cubic-bezier(.2,.9,.2,1), box-shadow 400ms;
+        }
+
+        .service-card.visible, .case-card.visible {
+            animation: popIn 600ms both;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.45);
+            border-color: rgba(99, 102, 241, 0.6);
+        }
+
+        /* Timeline: animate central line growth and staggered items */
+        .timeline::before {
+            transform-origin: top;
+            transform: scaleY(0);
+            transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+            will-change: transform;
+        }
+
+        .timeline.visible::before {
+            transform: scaleY(1);
+        }
+
+        .timeline-item {
+            opacity: 0;
+            transition: transform 700ms cubic-bezier(.2,.9,.2,1), opacity 700ms cubic-bezier(.2,.9,.2,1);
+            will-change: transform, opacity;
+        }
+
+        .timeline-item:nth-child(odd) {
+            transform: translateX(-80px) scale(0.98);
+        }
+
+        .timeline-item:nth-child(even) {
+            transform: translateX(80px) scale(0.98);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header class="header" id="header">
+        <div class="logo">NEXUS</div>
+        <nav class="nav">
+            <a href="#services">Послуги</a>
+            <a href="#cases">Кейси</a>
+            <a href="#process">Процес</a>
+            <a href="#contact">Контакти</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1>Маркетинг, який <br><span class="gradient-text">рухає бізнес вперед</span></h1>
+            <p>Повний супровід від стратегії до масштабування. Працюємо з малим та великим бізнесом.</p>
+            <div class="cta-group">
+                <a href="#contact" class="btn-primary">Обговорити проєкт</a>
+                <a href="#services" class="btn-secondary">Наші послуги</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="30" height="50" viewBox="0 0 30 50">
+                <rect x="5" y="5" width="20" height="40" rx="10" fill="none" stroke="#6366f1" stroke-width="2"/>
+                <circle cx="15" cy="15" r="3" fill="#6366f1">
+                    <animate attributeName="cy" from="15" to="35" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" from="1" to="0" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <h2 class="section-title">Що ми робимо</h2>
+        <p class="section-subtitle">Комплексні рішення для зростання вашого бізнесу</p>
+        
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-number">01</div>
+                <h3>Стратегія і аналітика</h3>
+                <p>Глибокий аналіз ринку, конкурентів та цільової аудиторії. Розробка довгострокової стратегії розвитку з чіткими KPI.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-number">02</div>
+                <h3>Performance-маркетинг</h3>
+                <p>Налаштування та масштабування рекламних кампаній з фокусом на ROI. Контекст, таргет, програматик.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-number">03</div>
+                <h3>Контент і креатив</h3>
+                <p>Створення контенту, який залучає та конвертує. Від концепції до виробництва.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-number">04</div>
+                <h3>Бренд-стратегія</h3>
+                <p>Побудова сильного бренду, який виділяється на ринку та створює довгострокову цінність.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-number">05</div>
+                <h3>CRM та автоматизація</h3>
+                <p>Впровадження систем для автоматизації маркетингу та збільшення LTV клієнтів.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-number">06</div>
+                <h3>Зростання та масштабування</h3>
+                <p>Системний підхід до зростання бізнесу через тестування гіпотез та оптимізацію воронок.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats" class="stats-section section">
+        <div class="stats-bg" id="statsBg"></div>
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" data-target="320">0</div>
+                <div class="stat-label">Успішних проєктів</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="4.8">0</div>
+                <div class="stat-label">Середній рейтинг клієнтів</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="280">0</div>
+                <div class="stat-label">Зростання продажів в середньому, %</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="12">0</div>
+                <div class="stat-label">Років на ринку</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cases" class="cases-section section">
+        <h2 class="section-title">Наші кейси</h2>
+        <p class="section-subtitle">Реальні результати наших клієнтів</p>
+        
+        <div class="cases-grid">
+            <div class="case-card">
+                <div class="case-image">🚀</div>
+                <div class="case-content">
+                    <span class="case-tag">E-commerce</span>
+                    <h3>Онлайн-магазин електроніки</h3>
+                    <p>Комплексна стратегія просування для інтернет-магазину. Запуск performance-кампаній, оптимізація конверсії та масштабування успішних каналів.</p>
+                    <div class="case-stats">
+                        <div class="case-stat">
+                            <div class="case-stat-value">+340%</div>
+                            <div class="case-stat-label">Зростання продажів</div>
+                        </div>
+                        <div class="case-stat">
+                            <div class="case-stat-value">x4.2</div>
+                            <div class="case-stat-label">ROI кампаній</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="case-card">
+                <div class="case-image">💼</div>
+                <div class="case-content">
+                    <span class="case-tag">B2B</span>
+                    <h3>IT-компанія</h3>
+                    <p>Розробка та впровадження стратегії лідогенерації для B2B-сектору. Створення контент-маркетингу та автоматизація процесів.</p>
+                    <div class="case-stats">
+                        <div class="case-stat">
+                            <div class="case-stat-value">+215%</div>
+                            <div class="case-stat-label">Кваліфікованих лідів</div>
+                        </div>
+                        <div class="case-stat">
+                            <div class="case-stat-value">-45%</div>
+                            <div class="case-stat-label">Вартість ліда</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="case-card">
+                <div class="case-image">🏪</div>
+                <div class="case-content">
+                    <span class="case-tag">Retail</span>
+                    <h3>Мережа магазинів</h3>
+                    <p>Повний ребрендинг та запуск омніканальної маркетингової стратегії. Інтеграція онлайн та офлайн каналів продажу.</p>
+                    <div class="case-stats">
+                        <div class="case-stat">
+                            <div class="case-stat-value">+180%</div>
+                            <div class="case-stat-label">Трафік в магазини</div>
+                        </div>
+                        <div class="case-stat">
+                            <div class="case-stat-value">+95%</div>
+                            <div class="case-stat-label">Впізнаваність бренду</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process-section section">
+        <h2 class="section-title">Як ми працюємо</h2>
+        <p class="section-subtitle">Прозорий процес від першого дзвінка до результату</p>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-number">1</div>
+                <div class="timeline-content">
+                    <h3>Аудит і аналіз</h3>
+                    <p>Проводимо глибокий аналіз вашого бізнесу, конкурентів та ринку. Визначаємо точки зростання.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">2</div>
+                <div class="timeline-content">
+                    <h3>Стратегія</h3>
+                    <p>Розробляємо детальну стратегію з чіткими KPI, бюджетом та планом дій.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">3</div>
+                <div class="timeline-content">
+                    <h3>Реалізація</h3>
+                    <p>Запускаємо кампанії, створюємо контент, налаштовуємо системи. Працюємо спринтами по 2 тижні.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">4</div>
+                <div class="timeline-content">
+                    <h3>Оптимізація</h3>
+                    <p>Аналізуємо результати, тестуємо гіпотези, масштабуємо те, що працює.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">5</div>
+                <div class="timeline-content">
+                    <h3>Зростання</h3>
+                    <p>Виходимо на стабільне зростання та масштабуємо успішні канали. Звітуємо щотижня.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <div class="form-container">
+            <h2>Готові до зростання?</h2>
+            <p>Заповніть форму і ми зв'яжемося з вами протягом 24 годин</p>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Ім'я *</label>
+                    <input type="text" id="name" name="name" required placeholder="Ваше ім'я">
+                </div>
+                
+                <div class="form-group">
+                    <label for="company">Компанія *</label>
+                    <input type="text" id="company" name="company" required placeholder="Назва вашої компанії">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Телефон *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="+380">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="service">Що вас цікавить? *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Оберіть послугу</option>
+                        <option value="strategy">Стратегія і аналітика</option>
+                        <option value="performance">Performance-маркетинг</option>
+                        <option value="content">Контент і креатив</option>
+                        <option value="branding">Бренд-стратегія</option>
+                        <option value="crm">CRM та автоматизація</option>
+                        <option value="growth">Зростання та масштабування</option>
+                        <option value="other">Інше</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Розкажіть про ваш проєкт</label>
+                    <textarea id="message" name="message" placeholder="Детальніше про ваш бізнес та задачі..."></textarea>
+                </div>
+                
+                <button type="submit" class="form-submit">Відправити заявку</button>
+            </form>
+        </div>
+        
+        <div class="contact-grid" style="margin-top: 5rem;">
+            <div class="contact-card">
+                <div class="contact-icon">📧</div>
+                <h3>Email</h3>
+                <p>hello@nexus.agency</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">📱</div>
+                <h3>Телефон</h3>
+                <p>+38 (067) 123-45-67</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">💬</div>
+                <h3>Telegram</h3>
+                <p>@nexus_agency</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 NEXUS Marketing Agency. Всі права захищені.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                follower.style.left = e.clientX + 'px';
+                follower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 100 + 50 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Scroll Header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for animations (general elements)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe general elements (we'll handle timeline items separately for stagger)
+        document.querySelectorAll('.section-title, .section-subtitle, .service-card, .case-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Timeline: grow central line and stagger items left/right
+        const timeline = document.querySelector('.timeline');
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible'); // will grow central line via CSS
+                    const items = Array.from(entry.target.querySelectorAll('.timeline-item'));
+                    items.forEach((item, idx) => {
+                        // stagger appearance: 180ms between items
+                        setTimeout(() => {
+                            item.classList.add('visible');
+                        }, idx * 180);
+                    });
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        if (timeline) timelineObserver.observe(timeline);
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.stat-number');
+        let counted = false;
+
+        const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !counted) {
+                    counted = true;
+                    counters.forEach(counter => {
+                        counter.classList.add('visible');
+                        const target = parseFloat(counter.getAttribute('data-target'));
+                        const duration = 2000;
+                        const step = target / (duration / 16);
+                        let current = 0;
+                        
+                        const updateCounter = () => {
+                            current += step;
+                            if (current < target) {
+                                counter.textContent = target % 1 === 0 ? Math.floor(current) : current.toFixed(1);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.textContent = target % 1 === 0 ? target : target.toFixed(1);
+                            }
+                        };
+                        
+                        updateCounter();
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => countObserver.observe(counter));
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Stats Background Animation
+        const statsBg = document.getElementById('statsBg');
+        for (let i = 0; i < 15; i++) {
+            const circle = document.createElement('div');
+            circle.style.position = 'absolute';
+            circle.style.borderRadius = '50%';
+            circle.style.background = 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)';
+            circle.style.width = Math.random() * 300 + 100 + 'px';
+            circle.style.height = circle.style.width;
+            circle.style.left = Math.random() * 100 + '%';
+            circle.style.top = Math.random() * 100 + '%';
+            circle.style.animation = `float ${Math.random() * 20 + 10}s infinite ease-in-out`;
+            circle.style.animationDelay = Math.random() * 5 + 's';
+            statsBg.appendChild(circle);
+        }
+
+        // Parallax Effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero-content');
+            parallaxElements.forEach(el => {
+                el.style.transform = `translateY(${scrolled * 0.5}px)`;
+            });
+        });
+
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Animate button
+            const btn = this.querySelector('.form-submit');
+            const originalText = btn.textContent;
+            btn.textContent = 'Відправляємо...';
+            btn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                btn.textContent = '✓ Заявку відправлено!';
+                btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                
+                setTimeout(() => {
+                    this.reset();
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    btn.style.background = '';
+                }, 3000);
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
