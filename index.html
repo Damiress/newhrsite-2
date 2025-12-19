@@ -2471,7 +2471,8 @@
             <h2>Готові до зростання?</h2>
             <p>Заповніть форму і ми зв'яжемося з вами протягом 24 годин</p>
             
-            <form id="contactForm">
+            <form action="https://api.web3forms.com/submit" method="POST" id="contactForm">
+                <input type="hidden" name="access_key" value="16f7d2ab-f385-4fd7-8612-ec7eb78d5c15">
                 <div class="form-group">
                     <label for="name">Ім'я *</label>
                     <input type="text" id="name" name="name" required placeholder="Ваше ім'я">
@@ -2759,6 +2760,7 @@
     </script>
 </body>
 </html>
+
 
 
 
